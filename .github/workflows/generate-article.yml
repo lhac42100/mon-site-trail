@@ -1,0 +1,35 @@
+name: Génération d'un article de fond
+
+on:
+  schedule:
+    # Tous les jours à 7h UTC — modifie selon ta fréquence souhaitée
+    - cron: "0 7 * * *"
+  workflow_dispatch: # permet de lancer manuellement depuis l'onglet Actions
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Générer l'article
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: node scripts/generate-article.mjs
+
+      - name: Commit et push si changement
+        run: |
+          git config user.name "Bot de contenu"
+          git config user.email "bot@noreply.github.com"
+          git add src/content/blog data/topics.json
+          git diff --staged --quiet || git commit -m "Nouvel article de fond généré automatiquement"
+          git push
