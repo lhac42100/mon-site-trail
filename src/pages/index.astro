@@ -1,17 +1,54 @@
 ---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
+const posts = (await getCollection("blog")).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+const latest = posts.slice(0, 3);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Trail & Sentiers — entraînement, matériel et actu trail">
+  <main>
+    <div class="page-intro">
+      <h1>Trail & Sentiers</h1>
+      <p>
+        Plans d'entraînement, choix de matériel, technique de course, et un
+        digest hebdomadaire sur l'actualité du trail running.
+      </p>
+    </div>
+
+    {
+      latest.length === 0 ? (
+        <p class="empty-state">
+          Le premier article arrive bientôt — repasse dans quelques heures.
+        </p>
+      ) : (
+        <>
+          <ul class="post-list">
+            {latest.map((post) => (
+              <li>
+                <a href={`/blog/${post.id}`} class="post-card">
+                  <span
+                    class:list={[
+                      "post-marker",
+                      post.data.type === "digest"
+                        ? "post-marker--digest"
+                        : "post-marker--article",
+                    ]}
+                  />
+                  <div class="post-card__body">
+                    <h2>{post.data.title}</h2>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p style="margin-top: 2rem;">
+            <a href="/blog">Voir tous les articles &rarr;</a>
+          </p>
+        </>
+      )
+    }
+  </main>
+</BaseLayout>

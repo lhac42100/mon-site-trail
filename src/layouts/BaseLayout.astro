@@ -1,0 +1,48 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a href="/" class="site-title">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M3 19L9 7L12 13L15 9L21 19H3Z"
+              fill="#6B8A5E"
+              stroke="#1F2E22"
+              stroke-width="1.4"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Trail & Sentiers
+        </a>
+        <span class="site-tagline">Entraînement, matériel et actu trail</span>
+      </div>
+    </header>
+
+    <slot />
+
+    <footer class="site-footer">
+      Contenu généré et publié automatiquement.
+    </footer>
+  </body>
+</html>

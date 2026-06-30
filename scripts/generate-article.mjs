@@ -91,7 +91,7 @@ async function main() {
 title: "${topic.title}"
 date: "${date}"
 slug: "${slug}"
-generated: true
+generated: true${topic.image ? `\nimage: "${topic.image}"` : ""}
 ---
 
 `;
